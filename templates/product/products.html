@@ -1,0 +1,44 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container my-5">
+    <div class="card">
+        <img src="{{product.product_images.first.image.url}}" alt="">
+        {% for images in product.product_images.all %}
+        <div class="row">
+            <div class="col-md-1">
+                <img  src="{{images.image.url}}" style="width: 100%;" alt="...">
+            </div>
+        </div>
+        {% endfor %}
+        <div class="card-body">
+            <h5 class="card-title">{{product.product_name}}</h5>
+            <p class="card-text">{{product.product_description}}</p>
+            {% if updated_price %}
+            <p>{{updated_price}}</p>
+            {% else %}
+            <p>{{product.price}}</p>
+            {% endif %}
+        </div>
+        {% if product.size_varient.count %}
+        {% for size in product.size_varient.all %}
+            <label for="">{{size.size_name}}</label>
+            <input onchange="get_correct_price('{{size.size_name}}')" type="radio" name="select_size" id="" {% if selected_size == size.size_name %} checked="" {% endif %}>
+
+        {% endfor %}
+        {% endif %}
+        <div class="card-body">
+            <a href="#" class="card-link">Buu Now</a>
+            <a href="{% url 'add_to_cart' product.uid %}?varient={{selected_size}}" class="card-link">Add to Cart</a>
+        </div>
+    </div>
+</div>
+
+<Script>
+    function get_correct_price(size){
+        window.location.href = window.location.pathname+`?size=${size}`
+    }
+</Script>
+
+{% endblock body %}

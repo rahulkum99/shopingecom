@@ -24,6 +24,8 @@ admin.site.index_title = 'Ecommerce'
 admin.site.site_title = 'Ecommerce Adminsitration'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts',include('accounts.urls')),
+    path('accounts/',include('accounts.urls')),
+    path('',include('home.urls')),
+    path('product/',include('products.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

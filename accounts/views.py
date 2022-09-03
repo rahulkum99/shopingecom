@@ -3,7 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.http import HttpResponseRedirect,HttpResponse
-from .models import Profile
+from .models import Profile, Cart,CartItem
+from products.models import *
 # Create your views here.
 
 
@@ -21,6 +22,7 @@ def login_page(request):
         user_obj = authenticate(username=email,password=password)
         if user_obj:
             login(request, user_obj)
+            messages.success(request, "login successffukl")
             return redirect('/')
         messages.error(request, "Invalid Creadationls")
         return HttpResponseRedirect(request.path_info)
@@ -52,3 +54,9 @@ def activate_email(request,email_token):
         user.save()
     except Exception as e:
         return HttpResponse("Invalid Email Creadential")
+
+
+def cart(request):
+    cart = Cart.objects.filter(is_paid=False,user=request.user)
+    context = {'cart':cart}
+    return render(request, 'cart/cart.html',context)
